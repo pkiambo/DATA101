@@ -94,3 +94,12 @@ decreased_malaria <- decreased_malaria[order(decreased_malaria$Health_Facilities
 decreased_malaria
 
 ```
+
+## Mutate the Dataset
+The ration of Facilities to Physician Density (per 100K people)
+```{r}
+malaria_complete <- mutate(malaria_complete, Facilities2Physician= Health_Facilities/Physician_Density_2013, na.rm = TRUE) 
+head(select(malaria_complete,County, Facilities2Physician),20)
+
+```
+
