@@ -653,7 +653,7 @@ decreased_malaria</code></pre>
 </div>
 <div id="reordering-the-subset-dataset" class="section level2">
 <h2>Reordering the subset Dataset</h2>
-<p>The subset dataset is reodered in relation to the number of Health Facilities</p>
+<p>The subset dataset is reodered, ascending, in relation to the number of Health Facilities</p>
 <pre class="r"><code>increased_malaria &lt;- increased_malaria[order(increased_malaria$Health_Facilities) , ]
 increased_malaria</code></pre>
 <pre><code>##     County Poverty_Rate_2006 Physician_Density_2013 Under_BedNet_2006
@@ -712,6 +712,33 @@ decreased_malaria</code></pre>
 ## 21                  23                92
 ## 42                  31                92
 ## 23                  23                93</code></pre>
+</div>
+<div id="mutate-the-dataset" class="section level2">
+<h2>Mutate the Dataset</h2>
+<p>The ration of Facilities to Physician Density (per 100K people)</p>
+<pre class="r"><code>malaria_complete &lt;- mutate(malaria_complete, Facilities2Physician= Health_Facilities/Physician_Density_2013, na.rm = TRUE) 
+head(select(malaria_complete,County, Facilities2Physician),20)</code></pre>
+<pre><code>##         County Facilities2Physician
+## 1      KAJIADO            57.500000
+## 2      NAIROBI             8.500000
+## 3       KIAMBU            15.090909
+## 4    KIRINYAGA            13.833333
+## 5         MERU            23.625000
+## 6         LAMU             6.400000
+## 7      MURANGA            42.750000
+## 8        NYERI             9.400000
+## 9        NAROK            33.250000
+## 10       SIAYA            56.000000
+## 11     THARAKA            33.000000
+## 12     MOMBASA            11.727273
+## 13     KERICHO            18.000000
+## 14        EMBU             9.818182
+## 15      VIHIGA            19.500000
+## 16      NAKURU            22.625000
+## 17    HOMA BAY            31.250000
+## 18 UASIN GISHU            10.000000
+## 19      KISUMU            10.800000
+## 20      MIGORI            92.000000</code></pre>
 </div>
 
 
