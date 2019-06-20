@@ -1,0 +1,96 @@
+---
+title: "Project I: Data Cleaning"
+author: "Patricia Kiambo"
+date: "6/18/2019"
+output: html_document
+---
+
+## Malaria Cases by Counties in Kenya - Year: 2006 & 2013
+
+```{r setup}
+library(dplyr)
+```
+
+## Data Import
+  Data was sourced from    https://data.humdata.org/dataset/bed-nets-and-illness-by-county-kenya
+  
+```{r}
+malaria_ke <- read.csv("malaria_explore.csv")
+```
+## Dimension of the Dataset
+
+```{r}
+dim(malaria_ke)
+```
+
+## Class of the Dataset
+```{r}
+class(malaria_ke)
+```
+
+## Structure of the Dataset
+```{r}
+str(malaria_ke)
+```
+
+## Head and Tail of the Dataset prior to Data Cleaning
+```{r}
+head(malaria_ke)
+tail(malaria_ke)
+```
+
+## Remane of the columns of the Dataset
+```{r}
+names(malaria_ke)[2]<-"Malaria_2006"
+names(malaria_ke)[3]<-"Malaria_2013"
+names(malaria_ke)[4]<-"Poverty_Rate_2006"
+names(malaria_ke)[5]<-"Physician_Density_2013"
+names(malaria_ke)[6]<-"Under_BedNet_2006"
+names(malaria_ke)[7]<-"HealthSpending_2006"
+names(malaria_ke)[8]<-"Health_Facilities"
+head(malaria_ke,3)
+```
+
+## Remove of the Missing values from dataset
+A set of dummy rows were added.
+
+```{r}
+tail(malaria_ke)
+dim(malaria_ke)
+malaria_ke_complete <- malaria_ke[complete.cases(malaria_ke),]
+malaria_complete <- na.omit(malaria_ke)
+dim(malaria_ke_complete)
+tail(malaria_complete)
+```
+
+## Summary of the Dataset
+```{r}
+summary(malaria_ke_complete)
+```
+
+## Subsetting of the Dataset
+Which countries had an increase and decrease in Malaria cases from 2006 to 2013?
+The resulting dataset removes the columns: Malaria_2006 & Malaria_2013
+
+```{r}
+increased_malaria <- subset(malaria_complete, Malaria_2006 < Malaria_2013 & Health_Facilities >100)
+increased_malaria <-(select(increased_malaria, -(Malaria_2006), -(Malaria_2013)))
+increased_malaria
+
+decreased_malaria <- subset(malaria_complete, Malaria_2006 > Malaria_2013 & Health_Facilities <100)
+decreased_malaria <-(select(decreased_malaria, -(Malaria_2006), -(Malaria_2013)))
+decreased_malaria
+
+```
+
+## Reordering the subset Dataset
+The subset dataset is reodered, ascending, in relation to the number of Health Facilities
+
+```{r}
+increased_malaria <- increased_malaria[order(increased_malaria$Health_Facilities) , ]
+increased_malaria
+
+decreased_malaria <- decreased_malaria[order(decreased_malaria$Health_Facilities) , ]
+decreased_malaria
+
+```
