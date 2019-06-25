@@ -1,0 +1,110 @@
+---
+title: "Project_II"
+author: "Patricia Kiambo"
+date: "6/23/2019"
+output: html_document
+---
+## Malaria Cases by Counties in Kenya - Year: 2006 & 2013
+
+## Data Import
+  Data was sourced from https://data.humdata.org/dataset/bed-nets-and-illness-by-county-kenya
+  
+## EDA Checklist
+
+## Formulate your question
+ I am interested in comparing the malaria cases in 2006 and 2013, and also exploring the correlation of poverty rate to malaria cases in 2006.
+
+## Read in your data
+```{r}
+library(dplyr)
+library(readr) 
+malaria_ke <- read.csv("malaria_explore.csv")
+```
+
+## Check the packaging
+```{r}
+nrow(malaria_ke)
+ncol(malaria_ke)
+```
+
+## Run str()
+```{r}
+str(malaria_ke)
+class(malaria_ke)
+```
+
+## Look at the top and bottom of the data
+```{r}
+head(malaria_ke[, c(2:5,7)])
+
+tail(malaria_ke[, c(2:5,8)])
+```
+
+## Check the n's (the count)
+```{r}
+ table(malaria_ke$Health_Facilities)
+
+## How many countries are represented in this dataset?
+select(malaria_ke, County) %>% unique %>% nrow 
+
+## Names of Counties in Kenya
+unique(malaria_ke$County) 
+```
+
+## Validate with at least one external data source
+```{r}
+## 
+summary(malaria_ke$Malaria_2006)
+
+## The Department of Health, Kenya attempts to keep the cases of Malaria under .45%. In 2006, the hightest malaria case was 0.6330. The mean barely meets the recommendation.
+
+## Let us look at the quantiles (deciles) of the data: 
+quantile(malaria_ke$Malaria_2006, seq(0, 1, 0.1)) 
+
+mtest<-filter(malaria_ke, Malaria_2006 > 0.35)
+nrow(mtest)
+head(mtest)
+```
+
+## Find an easy solution
+## 
+```{r}
+## Which counties have the highest cases of Malaria in 2006
+ranking <- group_by(malaria_ke, County) %>%  summarize(malaria_ke = mean(Malaria_2006)) %>% as.data.frame %>%  arrange(desc(malaria_ke))
+head(ranking, 10)
+```
+
+## Challenge the solution
+```{r}
+## Which counties had a reduced malaria cases by 2013?
+ranking <- group_by(malaria_ke, County) %>%  summarize(malaria_ke = (Malaria_2013-Malaria_2006)) %>% as.data.frame %>%  arrange(malaria_ke)
+tail(ranking, 10)
+```
+
+## Follow up
+```{r}
+## Calculates the 
+
+```
+
+## Exploratory Graphics
+
+```{r}
+library(ggplot2)
+
+## Histogram
+ggplot(malaria_ke, aes(Malaria_2006)) +
+  geom_histogram(binwidth = .025)
+
+ggplot(malaria_ke, aes(Malaria_2006)) + 
+  geom_histogram(aes(y=..density..), color="red", fill="green", binwidth = .025) +
+  geom_density(fill="gold",  alpha=.4)
+
+## Scatterplots
+with(malaria_ke,plot(Poverty_Rate_2006, Health_Facilities,xlab="Poverty Rate 2006", ylab = "Health_Facilities"))
+     
+ggplot(data = malaria_ke) + 
+  geom_point(mapping = aes(x = Poverty_Rate_2006, y = Health_Facilities, 
+                           color = Under_BedNet_2006,size= HealthSpending_2006))
+
+```
