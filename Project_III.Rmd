@@ -1,0 +1,49 @@
+---
+title: "Project_III"
+author: "Patricia Kiambo"
+date: "6/30/2019"
+output: html_document
+---
+## Malaria Cases by Counties in Kenya - Year: 2006 & 2013
+
+## Data Import
+  Data was sourced from https://data.humdata.org/dataset/bed-nets-and-illness-by-county-kenya
+
+## Formulate the question
+ I am interested in comparing the malaria cases in 2006 and 2013
+
+## Read in the data
+```{r}
+library(dplyr)
+
+malaria_ke <- read.csv("malaria_explore.csv")
+```
+
+Is the difference of means significant. Choose a categorical variable to create the two samples and take the means of a quantitative variable 
+
+```{r}
+## Boxplot to 
+boxplot(malaria_ke$Malaria_2006,  malaria_ke$Malaria_2013,col="sky blue")
+
+## One Sample t-test
+t.test(malaria_ke$Malaria_2006,malaria_ke$Malaria_2013)
+
+## Two Sample t-test
+t.test(x=malaria_ke$Malaria_2006,y=malaria_ke$Malaria_2013, 
+       mu=.16, 
+       alt="two.sided", 
+       conf=.95, 
+       var.eq=F, 
+       paired=F)
+
+```
+ 
+Justify why you reject or fail to reject the Null hypothesis based on p-value and confidence interval 
+
+```{r}
+## p-value = 0.9749
+## confidence level = 95%
+## A small p-value (typically ≤ 0.05) indicates strong evidence against the null hypothesis, so I reject the null hypothesis.
+
+```
+
